@@ -140,3 +140,4 @@ cython_debug/
 .idea/
 geckodriver.log
 selenium_env
+selenium_env/
