@@ -1,4 +1,4 @@
-from test_QA.pages.base_page import BasePage
+from pages.base_page import BasePage
 from .locators import LoginPageLocators
 from selenium.webdriver.support import expected_conditions as EC
 
