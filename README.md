@@ -5,7 +5,7 @@
     For Win:
     ##### selenium_env\Scripts\activate.bat
     For Unix:
-    ##### selenium_env\Scripts\activate
+    ##### source selenium_env\Scripts\activate
     Не сработает - запустите через sudo
 2.  Для запуска вам потребуется актуальная версия Питона, Селениум и PyTest
     Установка зависимостей (при наличии [Python](https://www.python.org/)) через терминал:
