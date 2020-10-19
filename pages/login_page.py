@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 from .locators import LoginPageLocators
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
 username, password = 'hr.doctor@hospitalrun.io', 'HRt3st12'
@@ -8,7 +9,11 @@ invalid_username, invalid_password = '1hr.doct1or@hospitalrun.io', '1HRt3st112'
 
 class LoginPage(BasePage):
     def is_login_page(self):
-        assert EC.element_to_be_clickable(self.browser.find_element(*LoginPageLocators.PAGE_NAME))
+        try:
+            self.browser.find_element(*LoginPageLocators.PAGE_NAME)
+        except NoSuchElementException:
+            return False
+        return True
 
     def log_in(self):
         login_field = self.browser.find_element(*LoginPageLocators.LOGIN_FIELD)

@@ -10,11 +10,11 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 
-
 class PatientListingPage(BasePage):
     def is_patient_listing_page(self):
         assert EC.text_to_be_present_in_element(self.browser.find_element(*PageLocators.PAGE_NAME),
-                                                PageLocators.PAGE_NAME_VALUE)
+                                                'Patient Listing'), \
+            'Page is not the Patient Listing Page'
 
     def logout(self):
         settings_button = self.browser.find_element(*PageLocators.SETTINGS_BUTTON)
@@ -40,42 +40,48 @@ class PatientListingPage(BasePage):
         new_request.click()
 
     def fill_the_required_forms(self):
-        patient_field = self.browser.find_element(*PageLocators.PATIENT_FIELD)
-        time.sleep(3)
-        patient_field.send_keys('Test Patient', Keys.ARROW_DOWN*4, Keys.ENTER)
-        time.sleep(3)
+        try:
+            patient_field = self.browser.find_element(*PageLocators.PATIENT_FIELD)
+            time.sleep(3)
+            patient_field.send_keys('Test Patient', Keys.ARROW_DOWN * 4, Keys.ENTER)
+            time.sleep(3)
 
-        visit_field = self.browser.find_element(*PageLocators.VISIT_FIELD)
-        visit_field.click()
-        visit_field = Select(visit_field)
-        time.sleep(3)
-        visit_field.select_by_index(1)
-        time.sleep(4)
+            visit_field = self.browser.find_element(*PageLocators.VISIT_FIELD)
+            visit_field.click()
+            visit_field = Select(visit_field)
+            time.sleep(3)
+            visit_field.select_by_index(1)
+            time.sleep(4)
 
-        medication_field = self.browser.find_elements(*PageLocators.MEDICATION_FIELD)[1]
-        medication_field.send_keys('Pramoxin', Keys.TAB)
+            medication_field = self.browser.find_elements(*PageLocators.MEDICATION_FIELD)[1]
+            medication_field.send_keys('Pramoxin', Keys.TAB)
 
-        prescription_field = self.browser.find_element(*PageLocators.PRESCRIPTION_FIELD)
-        prescription_field.send_keys('Testing prescription ')
+            prescription_field = self.browser.find_element(*PageLocators.PRESCRIPTION_FIELD)
+            prescription_field.send_keys('Testing prescription ')
 
-        quantity_requested_field = self.browser.find_elements(*PageLocators.QUANTITY_REQUEST_FIELD)[1]
-        quantity_requested_field.click()
-        quantity_requested_field.send_keys(randint(1, 5))
+            quantity_requested_field = self.browser.find_elements(*PageLocators.QUANTITY_REQUEST_FIELD)[1]
+            quantity_requested_field.click()
+            quantity_requested_field.send_keys(randint(1, 5))
+        except NoSuchElementException:
+            assert False, 'At least one required form missed'
 
     def fill_not_the_required_forms(self):
-        prescription_date_field = self.browser.find_elements(*PageLocators.PRESCRIPTION_DATE_FIELD)[0]
-        prescription_date_field.click()
-        prescription_date_field.clear()
-        correct_date = date.today().strftime("%m/%d/%Y")
-        list_date = correct_date.split('/')
-        list_date[1] = str(int(list_date[1]) - 1)
-        a_day_earlier = '/'.join(list_date)
-        prescription_date_field.send_keys(a_day_earlier)
+        try:
+            prescription_date_field = self.browser.find_elements(*PageLocators.PRESCRIPTION_DATE_FIELD)[0]
+            prescription_date_field.click()
+            prescription_date_field.clear()
+            correct_date = date.today().strftime("%m/%d/%Y")
+            list_date = correct_date.split('/')
+            list_date[1] = str(int(list_date[1]) - 1)
+            a_day_earlier = '/'.join(list_date)
+            prescription_date_field.send_keys(a_day_earlier)
 
-        refils_field = self.browser.find_elements(*PageLocators.REFILS_FIELD)[2]
-        refils_field.click()
-        refils_field.send_keys(randint(5, 10))
-        time.sleep(3)
+            refils_field = self.browser.find_elements(*PageLocators.REFILS_FIELD)[2]
+            refils_field.click()
+            refils_field.send_keys(randint(5, 10))
+            time.sleep(3)
+        except NoSuchElementException:
+            assert False, 'At least one not-required form missed'
 
     def click_the_add_button(self):
         try:
@@ -86,7 +92,8 @@ class PatientListingPage(BasePage):
 
     def check_popup_window(self):
         popup = self.browser.find_element(*PageLocators.POPUP)
-        assert popup == self.browser.find_element(By.XPATH, '//div[text()="The medication record has been saved."]')
+        assert popup == self.browser.find_element(By.XPATH,
+               '//div[text()="The medication record has been saved."]'), 'The popup window is not shown'
 
     def check_the_ok_button(self):
         try:
@@ -117,4 +124,5 @@ class PatientListingPage(BasePage):
 
     def user_stayed_on_the_new_medication_request_page(self):
         new_medication_request_page = self.browser.find_element(*PageLocators.NEW_MEDICATION_REQUEST_PAGE)
-        assert new_medication_request_page.text == 'New Medication Request'
+        assert new_medication_request_page.text == 'New Medication Request', \
+            'User is redirected from New Medication Page'
