@@ -27,7 +27,7 @@ class TestMain:
         page = LoginPage(browser, link)
         page.open()
         page.log_in_with_invalid_users_data()
-        page.is_login_page()
+        page.is_login_page_after_opening_site()
 
     @allure.story('User is able to logout')
     def test_user_is_able_to_logout(self, browser):  # User is able to logout
@@ -37,7 +37,7 @@ class TestMain:
         patient_listing_page = PatientListingPage(browser, browser.current_url)
         patient_listing_page.logout()
         login_page = LoginPage(browser, browser.current_url)
-        login_page.is_login_page()
+        login_page.is_login_page_after_log_out()
 
 
 # Additional task

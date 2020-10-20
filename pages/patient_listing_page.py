@@ -16,13 +16,10 @@ class PatientListingPage(BasePage):
     def is_patient_listing_page(self):
         try:
             patient_page_link = 'http://demo.hospitalrun.io/#/patients'
-            if WebDriverWait(self.browser, 10) \
-                    .until(EC.text_to_be_present_in_element(
-                (PageLocators.PAGE_NAME[0], PageLocators.PAGE_NAME[1]), 'Patient Listing')):
-                time.sleep(7)
+            if WebDriverWait(self.browser, 5).until(EC.url_to_be(patient_page_link)):
                 assert patient_page_link == self.browser.current_url, 'Page is not the Login page'
         except TimeoutException:
-            assert False, 'Page is not the Patient Listing Page'
+            assert False, 'Page is not the Login page'
 
     def logout(self):
         settings_button = self.browser.find_element(*PageLocators.SETTINGS_BUTTON)

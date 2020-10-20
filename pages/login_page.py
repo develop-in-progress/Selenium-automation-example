@@ -3,22 +3,29 @@ from .locators import LoginPageLocators
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import time
+
 
 username, password = 'hr.doctor@hospitalrun.io', 'HRt3st12'
 invalid_username, invalid_password = '1hr.doct1or@hospitalrun.io', '1HRt3st112'
+login_link = 'http://demo.hospitalrun.io/#/login'
 
 
 class LoginPage(BasePage):
-    def is_login_page(self):
+    def is_login_page_after_log_out(self):
         try:
-            login_link = 'http://demo.hospitalrun.io/#/login'
-            by, locator = LoginPageLocators.PAGE_NAME[0], LoginPageLocators.PAGE_NAME[1]
-            if WebDriverWait(self.browser, 10).until(EC.presence_of_element_located((by, locator))):
-                time.sleep(7)
+            if WebDriverWait(self.browser, 5).until(EC.url_to_be(login_link)):
                 assert login_link == self.browser.current_url, 'Page is not the Login page'
         except TimeoutException:
             assert False, 'Page is not the Login page'
+
+    def is_login_page_after_opening_site(self):
+        try:
+            if WebDriverWait(self.browser, 5).until(EC.url_changes(login_link)):
+                assert False, 'Page is not the Login page'
+            elif WebDriverWait(self.browser, 5).until(EC.url_to_be(login_link)):
+                assert login_link == self.browser.current_url, 'Page is not the Login page'
+        except TimeoutException:
+            pass
 
     def log_in(self):
         login_field = self.browser.find_element(*LoginPageLocators.LOGIN_FIELD)
