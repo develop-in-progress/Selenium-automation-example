@@ -22,7 +22,7 @@ class LoginPage(BasePage):
         try:
             if WebDriverWait(self.browser, 5).until(EC.url_changes(login_link)):
                 assert False, 'Page is not the Login page'
-            elif WebDriverWait(self.browser, 5).until(EC.url_to_be(login_link)):
+            elif WebDriverWait(self.browser, 10).until(EC.url_to_be(login_link)):
                 assert login_link == self.browser.current_url, 'Page is not the Login page'
         except TimeoutException:
             pass
