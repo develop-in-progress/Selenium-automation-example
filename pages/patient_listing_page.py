@@ -8,13 +8,21 @@ from random import randint
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 
 class PatientListingPage(BasePage):
     def is_patient_listing_page(self):
-        assert EC.text_to_be_present_in_element(self.browser.find_element(*PageLocators.PAGE_NAME),
-                                                'Patient Listing'), \
-            'Page is not the Patient Listing Page'
+        try:
+            patient_page_link = 'http://demo.hospitalrun.io/#/patients'
+            if WebDriverWait(self.browser, 10) \
+                    .until(EC.text_to_be_present_in_element(
+                (PageLocators.PAGE_NAME[0], PageLocators.PAGE_NAME[1]), 'Patient Listing')):
+                time.sleep(7)
+                assert patient_page_link == self.browser.current_url, 'Page is not the Login page'
+        except TimeoutException:
+            assert False, 'Page is not the Patient Listing Page'
 
     def logout(self):
         settings_button = self.browser.find_element(*PageLocators.SETTINGS_BUTTON)
@@ -65,7 +73,7 @@ class PatientListingPage(BasePage):
         except NoSuchElementException:
             assert False, 'At least one required form missed'
 
-    def fill_not_the_required_forms(self):
+    def fill_the_not_required_forms(self):
         try:
             prescription_date_field = self.browser.find_elements(*PageLocators.PRESCRIPTION_DATE_FIELD)[0]
             prescription_date_field.click()
@@ -93,7 +101,7 @@ class PatientListingPage(BasePage):
     def check_popup_window(self):
         popup = self.browser.find_element(*PageLocators.POPUP)
         assert popup == self.browser.find_element(By.XPATH,
-               '//div[text()="The medication record has been saved."]'), 'The popup window is not shown'
+                                                  '//div[text()="The medication record has been saved."]'), 'The popup window is not shown'
 
     def check_the_ok_button(self):
         try:

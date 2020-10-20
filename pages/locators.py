@@ -11,6 +11,8 @@ class LoginPageLocators:
 class PatientListingPageLocators:
     PAGE_NAME = (By.CSS_SELECTOR, "[class='view-current-title']")
     PAGE_NAME_VALUE = 'Patient Listing'
+    # PATIENT_PAGE = (By.CSS_SELECTOR, '[class="ember-application"]')
+    LOGIN_PAGE = (By.CSS_SELECTOR, '[class="ember-application"]')
     SETTINGS_BUTTON = (By.XPATH, '//span[@class="mega-octicon octicon-gear"]')
     LOGOUT_BUTTON = (By.CSS_SELECTOR, "[class='logout']")
     MEDICATION_BAR = (By.CSS_SELECTOR, '[href="#/medication"]')

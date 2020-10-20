@@ -7,6 +7,7 @@ from allure_commons.types import AttachmentType
 link = "http://demo.hospitalrun.io/"
 
 
+# Main task
 @allure.severity('blocker')
 @allure.feature('Login and loguot tests')
 @pytest.mark.main_task
@@ -22,7 +23,7 @@ class TestMain:
         patient_listing_page.is_patient_listing_page()
 
     @allure.story('User can`t login with invalid credentials')
-    def test_user_cant_log_in(self, browser):  # User can`t login with invalid credentials
+    def test_user_cant_log_in_with_invalid_users_data(self, browser):  # User can`t login with invalid credentials
         page = LoginPage(browser, link)
         page.open()
         page.log_in_with_invalid_users_data()
@@ -39,6 +40,7 @@ class TestMain:
         login_page.is_login_page()
 
 
+# Additional task
 @allure.severity('blocker')
 @pytest.mark.additional_task
 class TestAdditional:
@@ -53,7 +55,7 @@ class TestAdditional:
         patient_listing_page.check_medication_section()
         patient_listing_page.click_to_new_request()
         patient_listing_page.fill_the_required_forms()
-        patient_listing_page.fill_not_the_required_forms()
+        patient_listing_page.fill_the_not_required_forms()
         patient_listing_page.click_the_add_button()
         patient_listing_page.check_popup_window()
         patient_listing_page.check_the_ok_button()
